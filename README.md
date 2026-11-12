@@ -2,7 +2,7 @@
 
 **Ask your CCTV footage a question in plain words, and get back the moments that answer it, each one checked.**
 
-> "a man in a red Nike t-shirt" · "a man with a tatoo" · "a black SUV" · "a person texting" · *or a photo of a person*
+> "a man in a red Nike t-shirt" · "a man with a tattoo" · "a black SUV" · "a person texting" · *or a photo of a person*
 
 godsEye indexes recorded, uploaded and live video, then answers natural-language questions about it. It
 returns the exact moments on the exact cameras, with the person or vehicle outlined. Every result is
