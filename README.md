@@ -2,7 +2,7 @@
 
 **Ask your CCTV footage a question in plain words, and get back the moments that answer it, each one checked.**
 
-> "a man in a red Nike t-shirt" · "someone with a tattoo on his right hand" · "a black SUV" · "a person texting" · *or a photo of a person*
+> "a man in a red Nike t-shirt" · "a man with a tatoo" · "a black SUV" · "a person texting" · *or a photo of a person*
 
 godsEye indexes recorded, uploaded and live video, then answers natural-language questions about it. It
 returns the exact moments on the exact cameras, with the person or vehicle outlined. Every result is
@@ -11,15 +11,6 @@ checked by a vision model, condition by condition, before it is shown as a match
 <!-- DEMO: add a 30-60 s screen recording or GIF here, e.g.
 ![godsEye demo](docs/demo.gif)
 -->
-
-## Why I built it
-
-The idea came from a visit to **Jawaharlal Nehru Port (JNPT)** in Mumbai and a conversation with its
-admin and security teams. When something happens at a site like that, finding it in the footage still
-means people scrubbing through hours of video, camera by camera. I wanted them to be able to type what
-they are looking for instead.
-
-I built a working version and demoed it in Mumbai to teams at **JNPT** and **DRDO**.
 
 ## What it does
 
