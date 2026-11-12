@@ -1,0 +1,53 @@
+# Long-running services on the Studio. Started by start.sh (on Studio start and `make up`).
+version: "0.5"
+log_location: ${HOME}/data/logs/process-compose.log
+
+processes:
+  postgres:
+    command: /usr/lib/postgresql/17/bin/postgres -D /var/lib/godseye/pg  # local disk, see bootstrap.sh
+    readiness_probe:
+      exec:
+        command: /usr/lib/postgresql/17/bin/pg_isready -h 127.0.0.1 -p 5432 -U postgres
+      initial_delay_seconds: 1
+      period_seconds: 2
+    shutdown:
+      signal: 2 # SIGINT = fast shutdown
+    availability:
+      restart: on_failure
+
+  db-init:  # creates the DB and, if the index tables are empty, reloads them from Parquet (~1 min)
+    command: bash ${HOME}/godsEye/infra/studio/db_init.sh
+    depends_on:
+      postgres:
+        condition: process_healthy
+    availability:
+      restart: "no"
+
+  redis:
+    command: redis-server --bind 127.0.0.1 --port 6379 --dir ${HOME}/data/redis --appendonly yes
+    availability:
+      restart: on_failure
+
+  mediamtx:
+    command: ${HOME}/opt/bin/mediamtx ${HOME}/data/mediamtx.yml
+    availability:
+      restart: on_failure
+
+  api:  # FastAPI on :8000 (search, media, playback); waits for the index to be loaded
+    command: uv run uvicorn api.main:app --app-dir services --host 127.0.0.1 --port 8000
+    working_dir: ${HOME}/godsEye
+    environment:
+      - "PYTHONPATH=services"
+    depends_on:
+      db-init:
+        condition: process_completed_successfully
+    readiness_probe:
+      http_get:
+        host: 127.0.0.1
+        port: 8000
+        path: /health
+      initial_delay_seconds: 20
+      period_seconds: 5
+      failure_threshold: 60   # the CPU text encoder takes ~30 s to load after a restart
+    availability:
+      restart: on_failure

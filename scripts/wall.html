@@ -1,0 +1,29 @@
+<!doctype html>
+<!-- Transport test only: 2x2 wall of MediaMTX WebRTC players through the SSH tunnel (make tunnel).
+     Open with: open -a "Google Chrome" scripts/wall.html -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>godsEye transport test</title>
+  <style>
+    body { margin: 0; background: #0a0a0b; color: #a1a1aa; font: 13px ui-monospace, monospace; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; height: 100vh; padding: 4px; box-sizing: border-box; }
+    .cell { position: relative; background: #18181b; }
+    iframe { width: 100%; height: 100%; border: 0; }
+    span { position: absolute; top: 6px; left: 8px; z-index: 1; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div class="grid" id="grid"></div>
+  <script>
+    // ?hd=1 switches to the 1080p originals (about 4 Mbps each; the tunnel carries ~8 Mbps total).
+    const hd = new URLSearchParams(location.search).has("hd");
+    for (const cam of ["G330", "G339", "G421", "G639"]) {
+      const path = `meva-${cam}${hd ? "-hd" : ""}`;
+      document.getElementById("grid").insertAdjacentHTML("beforeend",
+        `<div class="cell"><span>${path}</span>
+         <iframe src="http://localhost:8889/${path}/?controls=false&muted=true&autoplay=true" allow="autoplay"></iframe></div>`);
+    }
+  </script>
+</body>
+</html>

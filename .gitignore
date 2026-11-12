@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+.next/
+.venv/
+__pycache__/
+*.pyc
+.secrets/
+data/
+.env
+.env.*
+*.tsbuildinfo
+next-env.d.ts
+infra/ssh_config

@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+/* Design tokens: Zinc neutrals, one accent (signal amber), red only for live alerts.
+   Dark-first; light follows the system unless data-theme pins it. */
+:root {
+  --bg: #0b0b0d;
+  --surface: #121215;
+  --surface-2: #18181c;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.16);
+  --text: #e7e7ea;
+  --muted: #a1a1aa;
+  --faint: #71717a;
+  --accent: oklch(0.8 0.15 75);
+  --accent-ink: #1a1305;
+  --accent-soft: oklch(0.8 0.15 75 / 0.14);
+  --alert: oklch(0.66 0.2 25);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --surface-2: #f1f1f3;
+    --line: rgb(0 0 0 / 0.08);
+    --line-strong: rgb(0 0 0 / 0.16);
+    --text: #18181b;
+    --muted: #52525b;
+    --faint: #71717a;
+    --accent: oklch(0.62 0.15 70);
+    --accent-ink: #ffffff;
+    --accent-soft: oklch(0.62 0.15 70 / 0.12);
+    color-scheme: light;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-alert: var(--alert);
+  --radius-ui: 6px;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,66 @@
+# MediaMTX config template; bootstrap.sh renders it to ~/data/mediamtx.yml with the publish password.
+# Only reachable through the Mac's SSH tunnel (the Studio has no public TCP/UDP ports).
+logLevel: info
+
+api: yes
+apiAddress: 127.0.0.1:9997
+
+rtsp: yes
+rtspTransports: [tcp] # no UDP RTP ports; the tunnel is TCP-only
+rtspAddress: :8554
+
+rtmp: yes
+rtmpAddress: :1935
+
+hls: yes
+hlsAddress: :8888
+
+webrtc: yes
+webrtcAddress: :8889
+# The SSH tunnel carries TCP only, so WebRTC media goes over ICE-TCP on 8189.
+# The browser reaches it at 127.0.0.1:8189 through the forwarded port.
+webrtcLocalUDPAddress: ""
+webrtcLocalTCPAddress: :8189
+webrtcIPsFromInterfaces: false
+webrtcAdditionalHosts: [127.0.0.1]
+
+srt: no
+moq: no
+
+# Every stream is recorded in 10 s fMP4 segments, so live results can be replayed and checked like any
+# video. Recordings go to the Studio's local disk (not the billed, synced home) and last 6 hours. The
+# playback server cuts any time window out of them (Studio-local; the API proxies it to the browser).
+playback: yes
+playbackAddress: 127.0.0.1:9996
+pathDefaults:
+  record: yes
+  recordPath: /var/lib/godseye/live/%path/%Y-%m-%d_%H-%M-%S-%f
+  recordFormat: fmp4
+  recordPartDuration: 1s
+  recordSegmentDuration: 10s
+  recordDeleteAfter: 6h
+
+authMethod: internal
+authInternalUsers:
+  # Anyone who can reach the tunnel may watch; the API stays local to the Studio.
+  - user: any
+    pass:
+    ips: []
+    permissions:
+      - action: read
+      - action: playback
+  - user: any
+    pass:
+    ips: ['127.0.0.1', '::1']
+    permissions:
+      - action: api
+      - action: metrics
+  # Publishing (phone, looped files) needs the password.
+  - user: publisher
+    pass: __PUBLISH_PASS__
+    ips: []
+    permissions:
+      - action: publish
+
+paths:
+  all_others:

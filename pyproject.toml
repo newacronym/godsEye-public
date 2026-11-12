@@ -1,0 +1,38 @@
+[project]
+name = "godseye"
+version = "0.1.0"
+description = "Natural-language search, alerts and analytics over CCTV footage."
+requires-python = ">=3.12,<3.13"
+# Studio-side code (loader, query, API, upload ingest). Batch indexing on Modal pins its own deps in
+# services/indexer/index_app.py. modal: the Studio sends uploads to the indexer; ultralytics: finding
+# the person in a photo query; websockets: streaming live frames to the GPU worker.
+dependencies = [
+    "anthropic==1.8.0",
+    "fastapi==0.141.1",
+    "modal==1.6.1",
+    "numpy",
+    "pgvector==0.5.0",
+    "pillow",
+    "psycopg[binary]==3.3.6",
+    "psycopg-pool==3.3.3",
+    "pyarrow==25.0.1",
+    "torch==2.14.0",
+    "torchvision==0.29.0",
+    "transformers==5.17.0",
+    "ultralytics==8.4.163",
+    "uvicorn==0.54.0",
+    "websockets==15.0.1",
+]
+
+[tool.uv]
+package = false
+
+# The free Studio is CPU-only; the query-time text encoder doesn't need CUDA wheels.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+torchvision = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

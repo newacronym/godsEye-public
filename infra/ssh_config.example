@@ -1,0 +1,11 @@
+# Project-local SSH config for the Lightning AI Studio. Copy to infra/ssh_config (git-ignored) and fill in
+# your Studio's SSH user from lightning.ai (Studio -> SSH). The Makefile uses `ssh -F infra/ssh_config`.
+Host godseye-studio
+  HostName ssh.lightning.ai
+  User <your-studio-ssh-user>
+  IdentityFile ~/.ssh/godseye
+  IdentitiesOnly yes
+  StrictHostKeyChecking accept-new
+  UpdateHostKeys no
+  ServerAliveInterval 30
+  ServerAliveCountMax 4
